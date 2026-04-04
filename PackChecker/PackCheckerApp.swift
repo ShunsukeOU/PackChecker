@@ -2,10 +2,11 @@
 //  PackCheckerApp.swift
 //  PackChecker
 //
-//  Created by 平良隼涼 on 2026/04/03.
+//  Created by Shunsuke Taira on 2026/04/03.
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct PackCheckerApp: App {
@@ -13,5 +14,6 @@ struct PackCheckerApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: [ItemSet.self, PackItem.self])
     }
 }
