@@ -6,18 +6,23 @@
 //
 
 //Itemset(どこにいく時のアイテムセットか）、PackItem（実際の持ち物）の二つのデータセットを作成する
+//
+//  Models.swift
+//  PackChecker
+//
+
 import Foundation
 import SwiftData
-import SwiftUI //色を扱うために追加
+import SwiftUI
 
 @Model
 final class ItemSet {
     var name: String
-    var colorName: String//カードの色を保存する
+    var colorName: String
     
     @Relationship(deleteRule: .cascade) var items: [PackItem]
     
-    init(name: String, colorName: String = "blue", items: [PackItem] = []) {
+    init(name: String, colorName: String = "indigo", items: [PackItem] = []) {
         self.name = name
         self.colorName = colorName
         self.items = items
@@ -33,19 +38,18 @@ final class PackItem {
     }
 }
 
-//保存した色の名前実際のSwiftUIのColorに変換するための便利な拡張機能を追加
 extension String {
     var toColor: Color {
         switch self {
-        case "red": return .red
+        case "red": return .pink
         case "orange": return .orange
         case "yellow": return .yellow
-        case "green": return .green
-        case "blue": return .blue
+        case "green": return .mint
+        case "blue": return .cyan
+        case "indigo": return .indigo
         case "purple": return .purple
-        case "pink": return .pink
-        case "gray": return .gray
-        default: return .blue
+        case "gray": return Color(UIColor.systemGray)
+        default: return .indigo
         }
     }
 }

@@ -13,13 +13,13 @@ struct AddEditSetView: View {
     @Environment(\.dismiss) private var dismiss
     
     @State private var name: String = ""
-    @State private var selectedColor: String = "red"
+    @State private var selectedColor: String = "indigo"
     @State private var newItemName: String = ""
     @State private var items: [String] = []
     
     var itemSetToEdit: ItemSet?
     
-    let colors = ["red", "orange", "yellow", "green", "blue", "gray"]
+    let colors = ["red", "orange", "yellow", "green", "blue", "indigo", "purple", "gray"]
     
     init(itemSetToEdit: ItemSet? = nil) {
         self.itemSetToEdit = itemSetToEdit
@@ -34,12 +34,12 @@ struct AddEditSetView: View {
         NavigationStack {
             Form {
                 Section(header: Text("行き先")) {
-                    TextField("例: ジム、サウナ", text: $name)
+                    TextField("例: サウナ", text: $name)
                 }
                 
                 Section(header: Text("持ち物リスト")) {
                     HStack {
-                        TextField("新しい持ち物を入力", text: $newItemName)
+                        TextField("例: 時計", text: $newItemName)
                             .onSubmit { addItem() }
                         
                         Button(action: addItem) {
@@ -57,16 +57,16 @@ struct AddEditSetView: View {
                     }
                 }
                 
-                Section(header: Text("カテゴリ")) {
+                Section(header: Text("カラー")) {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16) {
                             ForEach(colors, id: \.self) { colorName in
                                 Circle()
-                                    .fill(colorName.toColor)
+                                    .fill(colorName.toColor.gradient)
                                     .frame(width: 44, height: 44)
                                     .overlay(
                                         Circle()
-                                            .stroke(Color.primary, lineWidth: selectedColor == colorName ? 3 : 0)
+                                            .stroke(Color.primary.opacity(0.5), lineWidth: selectedColor == colorName ? 3 : 0)
                                     )
                                     .onTapGesture {
                                         let impactHeavy = UIImpactFeedbackGenerator(style: .light)
@@ -106,7 +106,7 @@ struct AddEditSetView: View {
         newItemName = ""
     }
     
-    private func save() {//データを保存する関数
+    private func save() {
         if let set = itemSetToEdit {
             set.name = name
             set.colorName = selectedColor
@@ -124,7 +124,7 @@ struct AddEditSetView: View {
             context.insert(newSet)
         }
         
-        do {//一応
+        do {
             try context.save()
         } catch {
             print("エラー：保存に失敗しました: \(error)")

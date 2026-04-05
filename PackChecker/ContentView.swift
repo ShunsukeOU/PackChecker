@@ -5,6 +5,7 @@
 //  Created by Shunsuke Taira on 2026/04/03.
 //
 
+
 import SwiftUI
 import SwiftData
 
@@ -30,9 +31,9 @@ struct ContentView: View {
                             }
                             .padding()
                             .frame(height: 80)
-                            .background(itemSet.colorName.toColor)
+                            .background(itemSet.colorName.toColor.gradient)
                             .cornerRadius(16)
-                            .shadow(color: .black.opacity(0.2), radius: 4, x: 0, y: 2)
+                            .shadow(color: itemSet.colorName.toColor.opacity(0.4), radius: 6, x: 0, y: 4)
                         }
                         .buttonStyle(.plain)
                         .contextMenu {
@@ -43,13 +44,13 @@ struct ContentView: View {
                             }
                             
                             Button(role: .destructive) {
-                                context.delete(itemSet)
-                                try? context.save()//一応確実に削除する
+                                deleteSet(itemSet)
                             } label: {
                                 Label("削除", systemImage: "trash")
                             }
                         } preview: {
-                            DetailView(itemSet: itemSet)
+                            //クイックルックのサイズを中身の縦横に合わせる
+                            ItemSetPreviewView(itemSet: itemSet)
                         }
                     }
                 }
@@ -71,5 +72,42 @@ struct ContentView: View {
                 AddEditSetView(itemSetToEdit: itemSet)
             }
         }
+    }
+    
+    private func deleteSet(_ itemSet: ItemSet) {
+        context.delete(itemSet)
+        try? context.save()
+    }
+}
+
+//追加の挙動（アイテムカードを長押ししした時のクイックルック）
+struct ItemSetPreviewView: View {
+    var itemSet: ItemSet
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(itemSet.name)
+                .font(.headline)
+                .foregroundColor(itemSet.colorName.toColor)
+            
+            VStack(alignment: .leading, spacing: 8) {
+                if itemSet.items.isEmpty {
+                    Text("持ち物がありません")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                } else {
+                    ForEach(itemSet.items) { item in
+                        HStack {
+                            Image(systemName: "circle")
+                                .font(.system(size: 20))
+                                .foregroundColor(.secondary)
+                            Text(item.name)
+                                .font(.subheadline)
+                        }
+                    }
+                }
+            }
+        }
+        .padding(20)
     }
 }
