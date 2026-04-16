@@ -1,0 +1,23 @@
+# Xcode
+build/
+DerivedData/
+*.hmap
+*.ipa
+*.xcuserstate
+
+**/xcuserdata/
+
+# Swift Package Manager
+
+.build/
+.swiftpm/
+
+*.key
+*.png
+
+# OS関連 (macOS)
+.DS_Store
+*.swp
+*~
+
+crashlyticsFiles/
